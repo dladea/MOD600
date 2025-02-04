@@ -42,8 +42,8 @@ for i in range(M):
 
 plt.figure()
 plt.plot(x, u0, '-r', label='Initial Condition')
-plt.plot(x, u, '-b', label='Numerical Solution')
-plt.plot(x, u_analytical, '-og', label='Analytical Solution at T=0.5')
+plt.plot(x, u, 'ob', label='Numerical Solution')
+plt.plot(x, u_analytical, '-g', label='Analytical Solution at T=0.5')
 plt.axis([0, Ldom, -0.1, 3])
 plt.xlabel('x-axis')
 plt.ylabel('u_0(x)')

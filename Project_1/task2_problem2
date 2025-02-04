@@ -10,7 +10,6 @@ Ldom = 2
 dx = Ldom/M
 
 x = np.linspace(dx * 0.5, Ldom + 0.5 * dx - dx, M)
-
 # define initial condition
 def u0_func(x):
     v = np.zeros_like(x)
@@ -39,9 +38,9 @@ L1 = np.logical_and(y >= 0,  y <= Ldom)
 u_analytical[L1] = u0_func(y[L1])
 
 plt.figure()
-plt.plot(x, u0, '-or', label='Initial Condition')
-plt.plot(x, u, '-ob', label='Numerical Solution')
-plt.plot(x, u_analytical, '-og', label='Analytical Solution at T=0.5')
+plt.plot(x, u0, '-r', label='Initial Condition')
+plt.plot(x, u, 'ob', label='Numerical Solution')
+plt.plot(x, u_analytical, '-g', label='Analytical Solution at T=0.5')
 plt.axis([0, Ldom, -0.1, 1.1])
 plt.xlabel('x-axis')
 plt.ylabel('u_0(x)')
