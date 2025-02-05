@@ -7,8 +7,8 @@ from matplotlib.animation import FuncAnimation, PillowWriter
 
 
 # Parameters
-T = 50
-time_steps = 1050
+T = 100
+time_steps = 2100
 dt = T / time_steps
 L = 20 # Axon length
 D0 = 0.4 # Diffusion coefficient
@@ -49,7 +49,7 @@ flux = np.zeros(M)
 # Prepare the figure
 fig, ax = plt.subplots(1, 4, figsize=(25, 7))
 fig.suptitle("Task 3G", fontsize=16)
-time_text = fig.text(0.5, 0.98, "", ha='center', va='top', fontsize=14, bbox=dict(facecolor='white', alpha=0.8))
+time_text = fig.text(0.5, 0.02, "", ha='center', va='bottom', fontsize=14, bbox=dict(facecolor='white', alpha=0.8))
 
 ax[0].set_ylabel("Total Density")
 ax[0].set_ylim(-0.05, 0.2)
@@ -107,6 +107,8 @@ def init():
     time_text.set_text("")
     return line_num, line_num_pos, line_num_neg, line_total, total_flux, time_text
 
+
+
 # Iterate over different values of a
 for a in range(11):
     print(f"Processing animation for a={a}")
@@ -133,8 +135,10 @@ for a in range(11):
         npos_old = np.copy(npos)
         nneg[-1] = NL * sigmaL
         nneg_old = np.copy(nneg)
-        flux[1:]= npos[1:] - nneg[1:] - D0 * (n[1:] - n[:-1]) / dx
-        flux[0] = npos[0] - nneg[0]
+        
+        flux[1:] = npos[1:] * np.exp(-a*npos[1:]) -nneg[1:]*np.exp(-a*nneg[1:]) - D0 * (n[1:] - n[:-1]) / dx
+        flux[0] = flux[1]
+        flux[-1] = flux[-2]
 
         # Update plot data
         line_num.set_data(x, n)
@@ -142,7 +146,7 @@ for a in range(11):
         line_num_neg.set_data(x, nneg)
         line_total.set_data(x, n + npos + nneg)
         total_flux.set_data(x, flux)
-        time_text.set_text(f"Time: {current_time:.2f} seconds")
+        time_text.set_text(f"a = {a}, Time: {current_time:.2f} seconds, J at x=10 = {flux[49]:.4f}")
         return line_num, line_num_pos, line_num_neg, line_total, total_flux, time_text
 
     # Create animation for each value of 'a'

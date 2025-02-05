@@ -100,7 +100,7 @@ def init():
     line_total.set_data([], [])
     total_flux.set_data([], [])
     time_text.set_text("")
-    return line_num, line_num_pos, line_num_neg, line_total, total_flux, time_text
+    return line_num, line_num_pos, line_num_neg, line_total, total_flux, time_text,
 
 # Update function for animation
 def update(frame):
@@ -118,8 +118,11 @@ def update(frame):
     npos_old = np.copy(npos)
     nneg[-1] = NL * sigmaL
     nneg_old = np.copy(nneg)
+
+    # Calculate flux
     flux[1:]= npos[1:] - nneg[1:] - D0 * (n[1:] - n[:-1]) / dx
-    flux[0] = npos[0] - nneg[0]
+    flux[0] = flux[1]
+    flux[-1] = flux[-2]
     
     # Update data for animation
     line_num.set_data(x, n)
@@ -128,10 +131,10 @@ def update(frame):
     line_total.set_data(x, n + npos + nneg)
     total_flux.set_data(x, flux)
     time_text.set_text(f"Time: {current_time:.2f} seconds")
-    return line_num, line_num_pos, line_num_neg, line_total, total_flux, time_text
+    return line_num, line_num_pos, line_num_neg, line_total, total_flux, time_text,
 
 # Create animation
-anim = FuncAnimation(fig, update, frames=time_steps, init_func=init, blit=True)
+anim = FuncAnimation(fig, update, frames=time_steps, init_func=init, blit=False)
 
 # Save as GIF
 anim.save("3ffull100.gif", writer=PillowWriter(fps=30))
